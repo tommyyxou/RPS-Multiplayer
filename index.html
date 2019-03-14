@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RPS Multiplayer</title>
+
+    <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="./assets/javascript/app.js"></script>
+    
+
+</head>
+<body onload="initialize();">
+    <div class="header"></div>
+    <div>Rock Paper Scissors Lizard Spock</div>
+
+    <form id="playerInput">
+        <label for="playerName"><span class="text">Enter Player Name</span></label><br>
+        <input type="text" class="text" id="playerName" placeholder="Enter Player Name">
+        <input class="subReset hover" id="playerNameSubmit" type="button" value="Submit">
+    </form>
+
+    <div id="playerIdDiv">Hi <span id="displayPlayerName" ></span>, You are Player <span id="playerId"></span></div>
+
+    <div class="playerOne">
+        <div id="playerOneDiv">
+            <div id="playerOneName">Waiting for player 1</div>
+            <button class="p1Choice">Rock</button>
+            <button class="p1Choice">Paper</button>
+            <button class="p1Choice">Scissors</button>
+            <button class="p1Choice">Lizard</button>
+            <button class="p1Choice">Spock</button>
+        </div>
+        <div id="playerOneStat"></div>
+
+    </div>
+
+    <div class="playerTwo">
+        <div id="playerTwoDiv">
+            <div id="playerTwoName">Waiting for player 2</div>
+            <button class="p2Choice">Rock</button>
+            <button class="p2Choice">Paper</button>
+            <button class="p2Choice">Scissors</button>
+            <button class="p2Choice">Lizard</button>
+            <button class="p2Choice">Spock</button>
+        </div>
+        <div id="playerTwoStat"></div>
+
+    </div>
+
+    <div id="result">
+        
+    </div>
+    <div class="chat"></div>
+    <div class="footer"></div>
+</body>
+</html>
