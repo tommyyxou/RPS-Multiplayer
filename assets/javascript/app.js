@@ -53,17 +53,20 @@ let spock2 = "./assets/image/spock2.png"
 function initialize () {
     determinePlayer ();
     retrieveData ();
+    onreload ();
 }
 
 function determinePlayer () {
     $("#playerNameSubmit").on('click',function() {
         rootref.once("value", function(snapshot) {
             if (snapshot.val() === null) {
-                console.log ("database is null")
-                playerName = $("#playerName").val();
-                console.log ("P1: ", playerName)
-                playerId = 1
-                updateDataBase();
+                console.log ("database is null");
+                //if (snapshot.val().player1 !== null) {} else {
+                    playerName = $("#playerName").val();
+                    console.log ("P1: ", playerName);
+                    playerId = 1;
+                    updateDataBase();
+                //};
             } else {
                 playerName = $("#playerName").val();
                 console.log ("P2: ", playerName)
@@ -72,25 +75,6 @@ function determinePlayer () {
             }
         });
     });
-}
-
-function buttonSetup () {
-    console.log ("button setup")
-    if (playerId === 1) {
-        buttonClassString = ".p1Choice"
-        // playerOneDiv = $("#playerOneDiv");
-        
-        // rockIMG = $("<img>");
-        // rockIMG.attr('class',buttonClassString);
-        // rockIMG.attr('src',rock);
-        // rockIMG.text("Rock");
-
-        // playerOneDiv.append(rockIMG);
-    } else if (playerId === 2) {
-        buttonClassString = ".p2Choice"
-
-    }
-    console.log (buttonClassString)
 }
 
 function updateDataBase () {
@@ -146,6 +130,18 @@ function retrieveData () {
             dbP2Result = snapshot.val().player2.playerChoice
             console.log (dbP2Result);
 
+            if (dbP1Result !== undefined) {
+                $("#P1ChoiceMade").text("Choice Made")
+            } else {
+                $("#P1ChoiceMade").text("")
+            }
+
+            if (dbP2Result !== undefined) {
+                $("#P2ChoiceMade").text("Choice Made")
+            } else {
+                $("#P2ChoiceMade").text("")
+            }
+
             if (dbP1Result !== undefined & dbP2Result !== undefined) {
                 console.log ("ready for result")
                 checkResult ();
@@ -165,6 +161,25 @@ function greeting () {
     $("#playerId").text(playerId);
 }
 
+function buttonSetup () {
+    console.log ("button setup")
+    if (playerId === 1) {
+        buttonClassString = ".p1Choice"
+        // playerOneDiv = $("#playerOneDiv");
+        
+        // rockIMG = $("<img>");
+        // rockIMG.attr('class',buttonClassString);
+        // rockIMG.attr('src',rock);
+        // rockIMG.text("Rock");
+
+        // playerOneDiv.append(rockIMG);
+    } else if (playerId === 2) {
+        buttonClassString = ".p2Choice"
+
+    }
+    console.log (buttonClassString)
+}
+
 function displayPlayerDivPlayerName () {
     if (dbplayerDivPlayerOneName !== null) {
         $("#playerOneName").text(dbplayerDivPlayerOneName + " - Player 1")
@@ -182,8 +197,10 @@ function RPSLSButton () {
         if (playerChoiceMade === false) {
             playerChoice = e.currentTarget.innerText;
             console.log (playerChoice)
-            updateDataBase ();
             playerChoiceMade = true;
+            updateDataBase ();
+            playerChoice = null;
+            
         }
     });
 }
@@ -255,11 +272,30 @@ function checkResult () {
     }
 
     appendResult () 
+
 };
 
 function appendResult () {
+
+    //$(".resultmsg").remove();
+
     resultDiv = $("#result")
-    resultDiv.append("<div id='p1'>P1:" + dbP1Result + "</div>")
-    resultDiv.append("<div id='p2'>P2:" + dbP2Result + "</div>")
-    resultDiv.append("<div id='outcome'>" + result + "</div>")
+    resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerOneName +": " + dbP1Result + " </span>")
+    resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerTwoName +": " + dbP2Result + " </span>")
+    resultDiv.append("<span class='resultmsg'>" + result + "</span>")
+    playerChoice = null;
+    playerChoiceMade = false;
+    console.log ("playerId:" + playerId + " player choice made:" + playerChoiceMade)
+    updateDataBase ();
+}
+
+function onreload () {
+    $(window).on("unload", function() {
+        win = null;
+        lose = null;
+        tie = null;
+        playerChoice = null;
+        playerName = null;
+        updateDataBase ();
+    });
 }
