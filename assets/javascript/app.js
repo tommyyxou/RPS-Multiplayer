@@ -10,8 +10,10 @@ var config = {
 
 firebase.initializeApp(config);
 
+// Rock Paper Scissors Lizard Spock - Core Game Functions
+
 let database = firebase.database();
-let rootref = database.ref().child('playerDatabase');
+let gameRootref = database.ref().child('playerDatabase');
 
 let playerName = "";
 let playerChoiceMade = false;
@@ -35,6 +37,8 @@ let playerId = null;
 
 let buttonClassString = null;
 
+let PlayerChoiceCounter = 0;
+
 let rock = "./assets/image/rock.png"
 let rock2 = "./assets/image/rock2.png"
 
@@ -54,11 +58,15 @@ function initialize () {
     determinePlayer ();
     retrieveData ();
     onreload ();
+
+    chatSubmit ();
+    displayChat ();
 }
 
 function determinePlayer () {
-    $("#playerNameSubmit").on('click',function() {
-        rootref.once("value", function(snapshot) {
+    $("#playerNameSubmit").on('click',function(event) {
+        event.preventDefault();
+        gameRootref.once("value", function(snapshot) {
             if (snapshot.val() === null) {
                 console.log ("database is null");
                 //if (snapshot.val().player1 !== null) {} else {
@@ -74,12 +82,14 @@ function determinePlayer () {
                 updateDataBase();
             }
         });
+        buttonSetup ();
+        RPSLSButton ();
     });
 }
 
 function updateDataBase () {
     let playerIdString = "player" + playerId
-    rootref.child(playerIdString).set({
+    gameRootref.child(playerIdString).set({
         playerName: playerName,
         playerChoice: playerChoice,
         Win: win,
@@ -89,7 +99,7 @@ function updateDataBase () {
 }
 
 function retrieveData () {
-    rootref.on("value", function(snapshot) {
+    gameRootref.on("value", function(snapshot) {
         if (snapshot.val() !== null) {
             if (playerId === 1) {
                 playerDatabase = snapshot.val().player1;
@@ -152,8 +162,6 @@ function retrieveData () {
 
 function append () {
     greeting ();
-    buttonSetup ();
-    RPSLSButton ();
 }
 
 function greeting () {
@@ -198,9 +206,10 @@ function RPSLSButton () {
             playerChoice = e.currentTarget.innerText;
             console.log (playerChoice)
             playerChoiceMade = true;
+            PlayerChoiceCounter++
+            console.log (PlayerChoiceCounter)
             updateDataBase ();
-            playerChoice = null;
-            
+            playerChoice = null; 
         }
     });
 }
@@ -277,7 +286,7 @@ function checkResult () {
 
 function appendResult () {
 
-    //$(".resultmsg").remove();
+    $(".resultmsg").remove();
 
     resultDiv = $("#result")
     resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerOneName +": " + dbP1Result + " </span>")
@@ -299,3 +308,35 @@ function onreload () {
         updateDataBase ();
     });
 }
+
+// chat function 
+
+let chatRootref = database.ref().child('chatDatabase');
+
+function chatSubmit () {
+    $("#playerMessageSubmit").on('click',function(event) {
+        if (playerId !== null) {
+            event.preventDefault();
+            console.log ("msg sent")
+            let message = $("#playerMessage").val ();
+            let messageObject = {playerId: playerId, Message: message}
+            chatRootref.push(messageObject);
+        } else {console.log ("playerId is null")}
+    });
+    
+}
+
+function displayChat () {
+    
+        chatRootref.on("child_added", function(snapshot) {
+            console.log (snapshot.val());
+            message = snapshot.val();
+            if (message.playerId === 1) {
+                $("#chatroom").append("<div>" + dbplayerDivPlayerOneName + ": " + message.Message + "</div>")
+            } else if (message.playerId === 2) {
+                $("#chatroom").append("<div>" + dbplayerDivPlayerTwoName + ": " + message.Message + "</div>")
+            }
+        });
+}
+
+
