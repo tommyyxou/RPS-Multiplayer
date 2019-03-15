@@ -64,7 +64,7 @@ function initialize () {
 }
 
 function determinePlayer () {
-    $("#playerNameSubmit").on('click',function(event) {
+    $("#playerInput").on('submit',function(event) {
         event.preventDefault();
         gameRootref.once("value", function(snapshot) {
             if (snapshot.val() === null) {
@@ -74,12 +74,16 @@ function determinePlayer () {
                     console.log ("P1: ", playerName);
                     playerId = 1;
                     updateDataBase();
+                    $("#playerName").val("");
+                    $("#playerInput").remove();
                 //};
             } else {
                 playerName = $("#playerName").val();
                 console.log ("P2: ", playerName)
                 playerId = 2
                 updateDataBase();
+                $("#playerName").val("");
+                $("#playerInput").remove();
             }
         });
         buttonSetup ();
@@ -306,6 +310,9 @@ function onreload () {
         playerChoice = null;
         playerName = null;
         updateDataBase ();
+        let message = "Disconnected!"
+        console.log ("Message:", message)
+        pushChat(message);
     });
 }
 
@@ -313,15 +320,22 @@ function onreload () {
 
 let chatRootref = database.ref().child('chatDatabase');
 
+function pushChat (message) {
+    console.log ("msg sent")
+    let messageObject = {playerId: playerId, Message: message}
+    chatRootref.push(messageObject);
+    $("#playerMessage").val ("");
+}
+
 function chatSubmit () {
-    $("#playerMessageSubmit").on('click',function(event) {
+    $("#messageInput").on('submit',function(event) {
         if (playerId !== null) {
             event.preventDefault();
-            console.log ("msg sent")
             let message = $("#playerMessage").val ();
-            let messageObject = {playerId: playerId, Message: message}
-            chatRootref.push(messageObject);
+            pushChat (message);
+            console.log ("Message:", message)
         } else {console.log ("playerId is null")}
+
     });
     
 }
