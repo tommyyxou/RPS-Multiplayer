@@ -37,8 +37,6 @@ let playerId = null;
 
 let buttonClassString = null;
 
-let PlayerChoiceCounter = 0;
-
 let rock = "./assets/image/rock.png"
 let rock2 = "./assets/image/rock2.png"
 
@@ -55,10 +53,11 @@ let spock = "./assets/image/spock.png"
 let spock2 = "./assets/image/spock2.png"
 
 function initialize () {
+    // Game Function
     determinePlayer ();
     retrieveData ();
     onreload ();
-
+    //Chat Function
     chatSubmit ();
     displayChat ();
 }
@@ -68,22 +67,11 @@ function determinePlayer () {
         event.preventDefault();
         gameRootref.once("value", function(snapshot) {
             if (snapshot.val() === null) {
-                console.log ("database is null");
-                //if (snapshot.val().player1 !== null) {} else {
-                    playerName = $("#playerName").val();
-                    console.log ("P1: ", playerName);
-                    playerId = 1;
-                    updateDataBase();
-                    $("#playerName").val("");
-                    $("#playerInput").remove();
-                //};
+                playerId = 1;
+                getName ();
             } else {
-                playerName = $("#playerName").val();
-                console.log ("P2: ", playerName)
                 playerId = 2
-                updateDataBase();
-                $("#playerName").val("");
-                $("#playerInput").remove();
+                getName ();
             }
         });
         buttonSetup ();
@@ -91,8 +79,16 @@ function determinePlayer () {
     });
 }
 
+function getName () {
+    playerName = $("#playerName").val();
+    updateDataBase();
+    $("#playerName").val("");
+    $("#playerInput").remove();
+    greeting ();
+}
+
 function updateDataBase () {
-    let playerIdString = "player" + playerId
+    let playerIdString = "player" + playerId;
     gameRootref.child(playerIdString).set({
         playerName: playerName,
         playerChoice: playerChoice,
@@ -107,76 +103,64 @@ function retrieveData () {
         if (snapshot.val() !== null) {
             if (playerId === 1) {
                 playerDatabase = snapshot.val().player1;
-                console.log (playerDatabase);
-                dbplayerName = playerDatabase.playerName;
-                dbplayerChoice = null;
-                dbWin = playerDatabase.Win;
-                dbLose = playerDatabase.Lose;
-                dbTie = playerDatabase.Tie;
-                append ();
+                setDatabaseValue (playerDatabase);
+                
             } else if (playerId === 2) {
                 playerDatabase = snapshot.val().player2;
-                console.log (playerDatabase);
-                dbplayerName = playerDatabase.playerName;
-                dbplayerChoice = null;
-                dbWin = playerDatabase.Win;
-                dbLose = playerDatabase.Lose;
-                dbTie = playerDatabase.Tie;
-                append ();
+                setDatabaseValue (playerDatabase);
             }
             
             if (snapshot.val().player1 === undefined) {
                 console.log("Player 1 Database is undefined")
-            } else{
-                dbplayerDivPlayerOneName = snapshot.val().player1.playerName
+            } else {
+                dbplayerDivPlayerOneName = snapshot.val().player1.playerName;
                 displayPlayerDivPlayerName ();
             }
 
             if (snapshot.val().player2 === undefined) {
                 console.log("Player 2 Database is undefined")
-            } else{
-                dbplayerDivPlayerTwoName = snapshot.val().player2.playerName
+            } else {
+                dbplayerDivPlayerTwoName = snapshot.val().player2.playerName;
                 displayPlayerDivPlayerName ();
             }
 
-            dbP1Result = snapshot.val().player1.playerChoice
-            console.log (dbP1Result);
-            dbP2Result = snapshot.val().player2.playerChoice
-            console.log (dbP2Result);
-
+            
+            dbP1Result = snapshot.val().player1.playerChoice;
+            dbP2Result = snapshot.val().player2.playerChoice;
             if (dbP1Result !== undefined) {
-                $("#P1ChoiceMade").text("Choice Made")
+                $("#P1ChoiceMade").text("Choice Made");
             } else {
-                $("#P1ChoiceMade").text("")
+                $("#P1ChoiceMade").text("");
             }
 
             if (dbP2Result !== undefined) {
-                $("#P2ChoiceMade").text("Choice Made")
+                $("#P2ChoiceMade").text("Choice Made");
             } else {
-                $("#P2ChoiceMade").text("")
+                $("#P2ChoiceMade").text("");
             }
 
             if (dbP1Result !== undefined & dbP2Result !== undefined) {
-                console.log ("ready for result")
                 checkResult ();
             }
         }
     });
 }
 
-function append () {
-    greeting ();
+function setDatabaseValue(playerDatabase) {
+    dbplayerName = playerDatabase.playerName;
+    dbplayerChoice = null;
+    dbWin = playerDatabase.Win;
+    dbLose = playerDatabase.Lose;
+    dbTie = playerDatabase.Tie;
 }
 
 function greeting () {
-    $("#displayPlayerName").text(dbplayerName);
-    $("#playerId").text(playerId);
+    $("#playerInfo").append("<div>Hi " + dbplayerName + ", you are player: " + playerId);
 }
 
 function buttonSetup () {
-    console.log ("button setup")
     if (playerId === 1) {
-        buttonClassString = ".p1Choice"
+        buttonClassString = ".p1Choice";
         // playerOneDiv = $("#playerOneDiv");
         
         // rockIMG = $("<img>");
@@ -186,119 +170,102 @@ function buttonSetup () {
 
         // playerOneDiv.append(rockIMG);
     } else if (playerId === 2) {
-        buttonClassString = ".p2Choice"
+        buttonClassString = ".p2Choice";
 
     }
-    console.log (buttonClassString)
 }
 
 function displayPlayerDivPlayerName () {
     if (dbplayerDivPlayerOneName !== null) {
-        $("#playerOneName").text(dbplayerDivPlayerOneName + " - Player 1")
+        $("#playerOneName").text(dbplayerDivPlayerOneName + " - Player 1");
     }
 
     if (dbplayerDivPlayerTwoName !== null) {
-        $("#playerTwoName").text(dbplayerDivPlayerTwoName + " - Player 2")
+        $("#playerTwoName").text(dbplayerDivPlayerTwoName + " - Player 2");
     }
 }
 
 function RPSLSButton () {
-    console.log ("button active, Id: ", playerId)
-    console.log (buttonClassString)
     $(buttonClassString).on('click', function(e) {
         if (playerChoiceMade === false) {
             playerChoice = e.currentTarget.innerText;
-            console.log (playerChoice)
             playerChoiceMade = true;
-            PlayerChoiceCounter++
-            console.log (PlayerChoiceCounter)
             updateDataBase ();
             playerChoice = null; 
         }
     });
 }
 
+function p1Win () {
+    result = dbplayerDivPlayerOneName + " win";
+}
+
+function p2Win () {
+    result = dbplayerDivPlayerTwoName + " win";
+}
+
 function checkResult () {
     if (dbP1Result == "Rock") {
         if (dbP2Result == "Rock") {
-            console.log ("tie")
-            result = "Tie"
+            result = "Tie";
         } else if (dbP2Result == "Scissors" | dbP2Result == "Lizard") {
-            console.log ("P1 win")
-            result = "P1 win"
+            p1Win ();
         } else {
-            console.log ("p2 win")
-            result = "P2 win"
+            p2Win ();
         }
     }
 
     if (dbP1Result == "Paper") {
         if (dbP2Result == "Paper") {
-            console.log ("tie")
-            result = "Tie"
+            result = "Tie";
         } else if (dbP2Result == "Rock" | dbP2Result == "Spock") {
-            console.log ("P1 win")
-            result = "P1 win"
+            p1Win ();
         } else {
-            console.log ("p2 win")
-            result = "P2 win"
+            p2Win ();
         }
     }
 
     if (dbP1Result == "Scissors") {
         if (dbP2Result == "Scissors") {
-            console.log ("tie")
-            result = "Tie"
+            result = "Tie";
         } else if (dbP2Result == "Paper" | dbP2Result == "Lizard") {
-            console.log ("P1 win")
-            result = "P1 win"
+            p1Win ();
         } else {
-            console.log ("p2 win")
-            result = "P2 win"
+            p2Win ();
         }
     }
 
     if (dbP1Result == "Lizard") {
         if (dbP2Result == "Lizard") {
-            console.log ("tie")
-            result = "Tie"
+            result = "Tie";
         } else if (dbP2Result == "Paper" | dbP2Result == "Spock") {
-            console.log ("P1 win")
-            result = "P1 win"
+            p1Win ();
         } else {
-            console.log ("p2 win")
-            result = "P2 win"
+            p2Win ();
         }
     }
 
     if (dbP1Result == "Spock") {
         if (dbP2Result == "Spock") {
-            console.log ("tie")
-            result = "Tie"
+            result = "Tie";
         } else if (dbP2Result == "Rock" | dbP2Result == "Scissors") {
-            console.log ("P1 win")
-            result = "P1 win"
+            p1Win ();
         } else {
-            console.log ("p2 win")
-            result = "P2 win"
+            p2Win ();
         }
     }
-
-    appendResult () 
-
+    appendResult ();
 };
 
 function appendResult () {
-
     $(".resultmsg").remove();
 
-    resultDiv = $("#result")
-    resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerOneName +": " + dbP1Result + " </span>")
-    resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerTwoName +": " + dbP2Result + " </span>")
-    resultDiv.append("<span class='resultmsg'>" + result + "</span>")
+    resultDiv = $("#result");
+    resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerOneName +": " + dbP1Result + " </span>");
+    resultDiv.append("<span class='resultmsg'>" + dbplayerDivPlayerTwoName +": " + dbP2Result + " </span>");
+    resultDiv.append("<span class='resultmsg'>" + result + "</span>");
     playerChoice = null;
     playerChoiceMade = false;
-    console.log ("playerId:" + playerId + " player choice made:" + playerChoiceMade)
     updateDataBase ();
 }
 
@@ -310,9 +277,15 @@ function onreload () {
         playerChoice = null;
         playerName = null;
         updateDataBase ();
-        let message = "Disconnected!"
-        console.log ("Message:", message)
-        pushChat(message);
+        if (playerId !== null) {
+            let message = "Disconnected!";
+            pushChat(message);
+        }
+        gameRootref.on("value", function(snapshot) {
+            if (snapshot.val() === null) {
+                chatRootref.remove();
+             }
+        });
     });
 }
 
@@ -321,8 +294,7 @@ function onreload () {
 let chatRootref = database.ref().child('chatDatabase');
 
 function pushChat (message) {
-    console.log ("msg sent")
-    let messageObject = {playerId: playerId, Message: message}
+    let messageObject = {playerId: playerId, Message: message};
     chatRootref.push(messageObject);
     $("#playerMessage").val ("");
 }
@@ -333,24 +305,22 @@ function chatSubmit () {
             event.preventDefault();
             let message = $("#playerMessage").val ();
             pushChat (message);
-            console.log ("Message:", message)
-        } else {console.log ("playerId is null")}
-
+        }
     });
     
 }
 
 function displayChat () {
-    
-        chatRootref.on("child_added", function(snapshot) {
-            console.log (snapshot.val());
+    chatRootref.on("child_added", function(snapshot) {
+        if (playerId !== null) {
             message = snapshot.val();
             if (message.playerId === 1) {
-                $("#chatroom").append("<div>" + dbplayerDivPlayerOneName + ": " + message.Message + "</div>")
+                $("#chatroom").append("<div>" + dbplayerDivPlayerOneName + ": " + message.Message + "</div>");
             } else if (message.playerId === 2) {
-                $("#chatroom").append("<div>" + dbplayerDivPlayerTwoName + ": " + message.Message + "</div>")
+                $("#chatroom").append("<div>" + dbplayerDivPlayerTwoName + ": " + message.Message + "</div>");
             }
-        });
+        }
+    });
 }
 
 

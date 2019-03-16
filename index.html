@@ -4,64 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>RPS Multiplayer</title>
+    <title>RPSLS Multiplayer</title>
 
     <script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/style.css">
     <script src="./assets/javascript/app.js"></script>
     
 
 </head>
 <body onload="initialize();">
-    <div class="header"></div>
-    <div>Rock Paper Scissors Lizard Spock</div>
-
-    <form id="playerInput">
-        <label for="playerName"><span class="text">Enter Player Name</span></label><br>
-        <input type="text" class="text" id="playerName" placeholder="Enter Player Name">
-        <input class="subReset hover" id="playerNameSubmit" type="submit" value="Submit">
-    </form>
-
-    <div id="playerIdDiv">Hi <span id="displayPlayerName" ></span>, You are Player <span id="playerId"></span></div>
-
-    <div class="playerOne">
-        <div id="playerOneDiv">
-            <div id="playerOneName">Waiting for player 1 <span id="P1ChoiceMade"></span></div>
-            <button class="p1Choice">Rock</button>
-            <button class="p1Choice">Paper</button>
-            <button class="p1Choice">Scissors</button>
-            <button class="p1Choice">Lizard</button>
-            <button class="p1Choice">Spock</button>
+    <div class="container">
+        <div class="header row justify-content-center">
+            <div>Rock Paper Scissors Lizard Spock</div>
         </div>
-        <div id="playerOneStat"></div>
-
-    </div>
-
-    <div class="playerTwo">
-        <div id="playerTwoDiv">
-            <div id="playerTwoName">Waiting for player 2 <span id="P2ChoiceMade"></span></div>
-            <button class="p2Choice">Rock</button>
-            <button class="p2Choice">Paper</button>
-            <button class="p2Choice">Scissors</button>
-            <button class="p2Choice">Lizard</button>
-            <button class="p2Choice">Spock</button>
+        <div id="playerInfo" class="row justify-content-center">
+            <form id="playerInput">
+                <input type="text" class="text" id="playerName" placeholder="Enter Player Name">
+                <input class="subReset hover" id="playerNameSubmit" type="submit" value="Submit">
+            </form>
         </div>
-        <div id="playerTwoStat"></div>
+        <div class="row">
+            <div id="playerOne" class="col">
+                <div id="playerOneDiv">
+                    <div id="playerOneName">Waiting for player 1 <span id="P1ChoiceMade"></span></div>
+                    <button class="p1Choice rock">Rock</button>
+                    <button class="p1Choice paper">Paper</button>
+                    <button class="p1Choice scissors">Scissors</button>
+                    <button class="p1Choice lizard">Lizard</button>
+                    <button class="p1Choice spock">Spock</button>
+                </div>
+                <div id="playerOneStat"></div>
+            </div>
+            <div id="playerTwo" class="col-6">
+                <div id="playerTwoDiv">
+                    <div id="playerTwoName">Waiting for player 2 <span id="P2ChoiceMade"></span></div>
+                    <button class="p2Choice rock">Rock</button>
+                    <button class="p2Choice paper">Paper</button>
+                    <button class="p2Choice scissors">Scissors</button>
+                    <button class="p2Choice lizard">Lizard</button>
+                    <button class="p2Choice spock">Spock</button>
+                </div>
+                <div id="playerTwoStat"></div>
+            </div>
+        </div>
+        <div id="result">
+            
+        </div>
+        <div id="chat" class="row justify-content-center">
+            <div id="chatroom"></div><br>
 
+            <form id="messageInput">
+                <input type="text" class="text" id="playerMessage" placeholder="Enter Message Here">
+                <input class="subReset hover" id="playerMessageSubmit" type="submit" value="Submit">
+            </form>
+        </div>
+        <div id="footer" class="row justify-content-center"></div>
     </div>
-
-    <div id="result">
-        
-    </div>
-    <div class="chat">
-        <div id="chatroom"></div>
-
-        <form id="messageInput">
-            <input type="text" class="text" id="playerMessage" placeholder="Enter Message Here">
-            <input class="subReset hover" id="playerMessageSubmit" type="submit" value="Submit">
-        </form>
-    </div>
-    <div class="footer"></div>
 </body>
 </html>
