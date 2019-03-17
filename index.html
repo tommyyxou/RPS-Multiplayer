@@ -15,49 +15,58 @@
 
 </head>
 <body onload="initialize();">
+    <div id="serverFull"></div>
     <div class="container">
         <div class="header row justify-content-center">
-            <div>Rock Paper Scissors Lizard Spock</div>
+            <img id="banner" src="./assets/image/banner.png" alt="Rock Paper Scissors Lizard Spock">
         </div>
         <div id="playerInfo" class="row justify-content-center">
             <form id="playerInput">
-                <input type="text" class="text" id="playerName" placeholder="Enter Player Name">
-                <input class="subReset hover" id="playerNameSubmit" type="submit" value="Submit">
+                <input type="text" class="col text" id="playerName" placeholder="Enter Player Name">
+                <input class="btn col" id="playerNameSubmit" type="submit" value="Submit">
             </form>
         </div>
-        <div class="row">
-            <div id="playerOne" class="col">
+        <div class="row justify-content-center">
+            <div id="playerOne" class="col-6 col-sm">
                 <div id="playerOneDiv">
-                    <div id="playerOneName">Waiting for player 1 <span id="P1ChoiceMade"></span></div>
-                    <button class="p1Choice rock">Rock</button>
-                    <button class="p1Choice paper">Paper</button>
-                    <button class="p1Choice scissors">Scissors</button>
-                    <button class="p1Choice lizard">Lizard</button>
-                    <button class="p1Choice spock">Spock</button>
+                    <h5><div id="playerOneName">Waiting for player 1 <span id="P1ChoiceMade"></span></div></h5>
+                    <button class="p1Choice btn btnGame">Rock</button>
+                    <button class="p1Choice btn btnGame">Paper</button>
+                    <button class="p1Choice btn btnGame">Scissors</button>
+                    <button class="p1Choice btn btnGame">Lizard</button>
+                    <button class="p1Choice btn btnGame">Spock</button>
                 </div>
-                <div id="playerOneStat"></div>
             </div>
-            <div id="playerTwo" class="col-6">
+            <div id="playerTwo" class="col-6 col-sm">
                 <div id="playerTwoDiv">
-                    <div id="playerTwoName">Waiting for player 2 <span id="P2ChoiceMade"></span></div>
-                    <button class="p2Choice rock">Rock</button>
-                    <button class="p2Choice paper">Paper</button>
-                    <button class="p2Choice scissors">Scissors</button>
-                    <button class="p2Choice lizard">Lizard</button>
-                    <button class="p2Choice spock">Spock</button>
+                    <h5><div id="playerTwoName">Waiting for player 2 <span id="P2ChoiceMade"></span></div></h5>
+                    <button class="p2Choice btn btnGame">Rock</button>
+                    <button class="p2Choice btn btnGame">Paper</button>
+                    <button class="p2Choice btn btnGame">Scissors</button>
+                    <button class="p2Choice btn btnGame">Lizard</button>
+                    <button class="p2Choice btn btnGame">Spock</button>
                 </div>
-                <div id="playerTwoStat"></div>
             </div>
         </div>
         <div id="result">
-            
-        </div>
-        <div id="chat" class="row justify-content-center">
-            <div id="chatroom"></div><br>
+            <div id="playerStat" class="row">
+                <div id="dbWin" class="col-4 justify-content-center"></div>
+                <div id="dbLose" class="col-4 justify-content-center"></div>
+                <div id="dbTie" class="col-4 justify-content-center"></div>
+            </div>
+            <div id="resultMsg" class="row justify-content-center">
 
-            <form id="messageInput">
-                <input type="text" class="text" id="playerMessage" placeholder="Enter Message Here">
-                <input class="subReset hover" id="playerMessageSubmit" type="submit" value="Submit">
+            </div>
+        </div>
+        <hr>
+        <h5><div class="row justify-content-center">In Game Chat Room</div></h5>
+        <hr>
+        <div id="chat">
+            <div id="chatroom" class="justify-content-center"></div><br>
+
+            <form id="messageInput" class="row justify-content-center">
+                <input type="text" class="col text" id="playerMessage" placeholder="Enter Message Here">
+                <input class="btn" id="playerMessageSubmit" type="submit" value="Submit">
             </form>
         </div>
         <div id="footer" class="row justify-content-center"></div>

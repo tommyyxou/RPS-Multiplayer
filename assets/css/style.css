@@ -1,0 +1,26 @@
+#banner {
+    width: 100%;
+    height: 20%
+}
+
+.btn {
+    margin: 5px;
+    background-color: #b12;
+    color: white;
+    font-size: 20px; 
+}
+
+.btnGame {
+    
+    width: 90px;
+    height: 60px;
+}
+
+#rule {
+    width: 90%;
+    height: 90%;
+}
+
+#resultmsg {
+    margin: 5px;
+}
