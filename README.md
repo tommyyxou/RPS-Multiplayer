@@ -16,6 +16,4 @@ You would need your own Firebase Database to run the game.
 		chat history is clear after both player left the game. you would maintain chat history as long as you did not leave the game.
 		
 5:	If player 2 left the game, new player will play as player 2 after entering his/her player name.
-		If player 1 left the game, player 2 would automatically switch to player 1 position, and wait for player 2. 
-		
-6 
+		If player 1 left the game, player 2 would automatically switch to player 1 position, and wait for player 2.
