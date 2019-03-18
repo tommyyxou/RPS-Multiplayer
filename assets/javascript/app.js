@@ -1,11 +1,12 @@
 //Initialize Firebase
+//Test with your own Firebase
 var config = {
-    apiKey: "AIzaSyA7XCy3XzNbC6YBSHk_BNTGhglqTVnhOSo",
-    authDomain: "rpsls-1877a.firebaseapp.com",
-    databaseURL: "https://rpsls-1877a.firebaseio.com",
-    projectId: "rpsls-1877a",
-    storageBucket: "rpsls-1877a.appspot.com",
-    messagingSenderId: "601122655635"
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
 };
 
 firebase.initializeApp(config);
@@ -38,16 +39,20 @@ let playerId = null;
 
 let buttonClassString = null;
 
+let isServerFull = false;
+
 function initialize () {
     // Game Function
     checkDatabase ();
-    determinePlayer ();
-    retrieveData ();
-    onreload ();
-    playerOneLeft ();
-    //Chat Function
-    chatSubmit ();
-    displayChat ();
+    if (isServerFull === false) {
+        determinePlayer ();
+        retrieveData ();
+        onreload ();
+        playerOneLeft ();
+        //Chat Function
+        chatSubmit ();
+        displayChat ();
+    }
 }
 
 function playerOneLeft () {
@@ -95,7 +100,8 @@ function checkDatabase () {
             if (snapshot.val().player2 !== undefined) {
                 $(".container").remove();
                 $("#serverFull").text("SERVER FULL")
-            }
+                isServerFull = true; 
+            }  
         }  
     });
 }
